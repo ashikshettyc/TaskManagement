@@ -3,6 +3,9 @@
 GitHub Repository:
 [TaskManagement](https://github.com/ashikshettyc/TaskManagement)
 
+Versel Live Link:
+[TaskManagement](https://task-management-amber-sigma.vercel.app)
+
 ## 🚀 How to Run the App
 
 ### 👤 For User:
