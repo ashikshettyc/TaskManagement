@@ -69,12 +69,14 @@ const MyCalendar = () => {
   const eventStyleGetter = (event: {
     approved: boolean;
     submitted: boolean;
+    rejected: boolean;
   }) => {
     let backgroundColor = '#ccc';
 
     if (event.approved) backgroundColor = '#4caf50';
     else if (event.submitted) backgroundColor = '#2196f3';
-    else backgroundColor = '#f44336';
+    else if (event.rejected) backgroundColor = '#f44336';
+    else backgroundColor = 'warning';
 
     return {
       style: {

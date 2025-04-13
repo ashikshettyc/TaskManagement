@@ -18,6 +18,7 @@ import { toast } from 'react-hot-toast';
 import UserList from './UserList';
 
 export interface Task {
+  photo: string;
   role: string;
   rejected: boolean;
   id: string;
@@ -163,8 +164,10 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
   });
   const filteredTasks = tasks.filter((task) => {
     if (filter === 'notSubmitted') return !task.submitted;
-    if (filter === 'submitted') return task.submitted && !task.approved;
+    if (filter === 'submitted')
+      return task.submitted && !task.approved && !task.rejected;
     if (filter === 'approved') return task.approved;
+    if (filter === 'rejected') return task.rejected;
     return true;
   });
 
@@ -220,7 +223,7 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
                     <CardContent>
                       <CardMedia
                         component="img"
-                        image={`https://picsum.photos/id/237/200/300`}
+                        image={task.photo[0]}
                         alt="Task Image"
                         sx={{
                           width: '100%',

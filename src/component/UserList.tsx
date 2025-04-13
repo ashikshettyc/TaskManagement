@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  CardMedia,
   Chip,
   CircularProgress,
   LinearProgress,
@@ -13,6 +14,7 @@ import {
 import React, { Dispatch, SetStateAction } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { FilterOption, Task } from './TaskList';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const UserList = ({
   filter,
@@ -75,6 +77,17 @@ const UserList = ({
             >
               <Card>
                 <CardContent>
+                  <CardMedia
+                    component="img"
+                    image={task.photo}
+                    alt="Task Image"
+                    sx={{
+                      width: '100%',
+                      height: 200,
+                      objectFit: 'cover',
+                      mb: 2,
+                    }}
+                  />
                   <Typography variant="h6">{task.title}</Typography>
                   <Typography variant="body2" sx={{ mb: 1 }}>
                     {task.description}
@@ -99,6 +112,8 @@ const UserList = ({
                     label={
                       task.approved
                         ? 'Approved'
+                        : task.rejected
+                        ? 'Rejected'
                         : task.submitted
                         ? 'Submitted'
                         : 'Not Submitted'
@@ -106,6 +121,8 @@ const UserList = ({
                     color={
                       task.approved
                         ? 'success'
+                        : task.rejected
+                        ? 'error'
                         : task.submitted
                         ? 'info'
                         : 'warning'
@@ -115,7 +132,7 @@ const UserList = ({
                   />
 
                   <Box sx={{ mt: 2 }}>
-                    {!task.submitted && !task.approved ? (
+                    {!task.submitted && !task.approved && !task.rejected ? (
                       <Button
                         variant="outlined"
                         color="primary"
@@ -134,6 +151,8 @@ const UserList = ({
                       </Button>
                     ) : task.approved ? (
                       <CheckCircleIcon color="success" />
+                    ) : task.rejected ? (
+                      <CancelIcon color="error" />
                     ) : (
                       <CheckCircleIcon color="info" />
                     )}

@@ -1,4 +1,3 @@
-
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 import { NextResponse } from 'next/server';
@@ -9,11 +8,11 @@ export async function POST(req: Request) {
   if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const payload = verifyToken(token) as { email: string };
-    if (!payload?.email) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 403 });
-    }
-  const user = await prisma.user.findUnique({ where: { email:payload.email } });
+  if (!payload?.email) {
+    return NextResponse.json({ error: 'Invalid token' }, { status: 403 });
+  }
 
+  const user = await prisma.user.findUnique({ where: { email: payload.email } });
   if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
   const body = await req.json();
@@ -28,33 +27,18 @@ export async function POST(req: Request) {
       uploadedImages.push(uploadRes.secure_url);
     }
   }
-  let task;
-if(user.role === "ADMIN"){
-  task = await prisma.task.create({
-    data: {
-      title,
-      description,
-      deadline: new Date(deadline),
-      progress,
-      photo: photos.join(','),
-      userId: user.id,
-      approved: true
-    },
-  });
-}else {
-  task = await prisma.task.create({
-    data: {
-      title,
-      description,
-      deadline: new Date(deadline),
-      progress,
-      photo: photos.join(','),
-      userId: user.id,
-    },
-  });
-}
 
-  
+  const task = await prisma.task.create({
+    data: {
+      title,
+      description,
+      deadline: new Date(deadline),
+      progress,
+      photo: uploadedImages.join(','),
+      userId: user.id,
+      ...(user.role === 'ADMIN' && { approved: true }),
+    },
+  });
 
   return NextResponse.json(task);
 }
