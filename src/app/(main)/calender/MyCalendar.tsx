@@ -158,7 +158,10 @@ const MyCalendar = () => {
               xs: '100vw',
               lg: '70vw',
             },
-            height: '100vw',
+            height: {
+              xs: '60vh',
+              lg: '80vh',
+            },
           }}
         >
           <Calendar
@@ -174,41 +177,43 @@ const MyCalendar = () => {
       )}
 
       {/* Tooltip for event details */}
-      {selectedEvent && tooltipPosition && (
-        <div
-          style={{
-            position: 'absolute',
-            top: tooltipPosition.y + 10,
-            left: tooltipPosition.x + 10,
-            backgroundColor: getEventColor(selectedEvent),
-            color: '#fff',
-            padding: '10px',
-            borderRadius: '8px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-            zIndex: 1000,
-            maxWidth: '300px',
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <strong>{selectedEvent.title}</strong>
-          <div>
-            <b>Creator:</b> {selectedEvent.user}
-          </div>
-          <div>
-            <b>End:</b> {new Date(selectedEvent.end).toLocaleString()}
-          </div>
-          <div>
-            Status:{' '}
-            {selectedEvent.approved
-              ? 'Approved'
-              : selectedEvent.rejected
-              ? 'Rejected'
-              : selectedEvent.submitted
-              ? 'Submitted'
-              : 'Pending'}
-          </div>
-        </div>
-      )}
+      <Stack>
+        {selectedEvent && tooltipPosition && (
+          <Box
+            style={{
+              position: 'absolute',
+              top: tooltipPosition.y + 10,
+              left: tooltipPosition.x + 10,
+              backgroundColor: getEventColor(selectedEvent),
+              color: '#fff',
+              padding: '10px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+              zIndex: 1000,
+              maxWidth: '300px',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <strong>{selectedEvent.title}</strong>
+            <div>
+              <b>Creator:</b> {selectedEvent.user}
+            </div>
+            <div>
+              <b>End:</b> {new Date(selectedEvent.end).toLocaleString()}
+            </div>
+            <div>
+              Status:{' '}
+              {selectedEvent.approved
+                ? 'Approved'
+                : selectedEvent.rejected
+                ? 'Rejected'
+                : selectedEvent.submitted
+                ? 'Submitted'
+                : 'Pending'}
+            </div>
+          </Box>
+        )}
+      </Stack>
     </Box>
   );
 };

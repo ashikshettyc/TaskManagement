@@ -43,7 +43,17 @@ const UserList = ({
         value={filter}
         exclusive
         onChange={(_, val) => val && setFilter(val)}
-        sx={{ mb: 3 }}
+        sx={{
+          mb: 3,
+          display: 'flex',
+          flex: {
+            xs: 'wrap',
+          },
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+        }}
         color="primary"
       >
         <ToggleButton value="notSubmitted">Not Submitted</ToggleButton>
