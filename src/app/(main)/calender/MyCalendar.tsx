@@ -67,7 +67,7 @@ const MyCalendar = () => {
           submitted: task.submitted,
           approved: task.approved,
           rejected: task.rejected,
-          user: task.user.name,
+          user: task.user?.name,
         })
       );
 
@@ -82,7 +82,7 @@ const MyCalendar = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
-
+  console.log(events);
   const eventStyleGetter = (event: {
     approved: boolean;
     submitted: boolean;

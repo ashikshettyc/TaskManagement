@@ -79,6 +79,11 @@ export async function GET(req:Request){
           where: {
             userId: user.id,
           },
+          include: {
+            user: {
+              select: { name: true, email: true }, 
+            },
+          },
         });
       }
       return NextResponse.json(tasks);
