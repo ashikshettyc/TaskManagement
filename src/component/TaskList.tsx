@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import UserList from './UserList';
+import { format } from 'date-fns';
 
 export interface Task {
   photo: string;
@@ -69,7 +70,6 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
       setLoading(false);
     }
   };
-
   const handleSubmission = async (id: string) => {
     try {
       setLoadingTaskId(id);
@@ -170,7 +170,29 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
     if (filter === 'rejected') return task.rejected;
     return true;
   });
+  const handleDelete = async (id: string) => {
+    try {
+      setLoadingTaskId(id);
+      const res = await fetch(`/api/task/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      if (!res.ok) throw new Error('Failed to delete task');
+
+      toast.success('Task deleted successfully');
+
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      toast.error('Task deletion failed');
+    } finally {
+      setLoadingTaskId(null);
+    }
+  };
   useEffect(() => {
     AllTasks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -223,7 +245,7 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
                     <CardContent>
                       <CardMedia
                         component="img"
-                        image={task.photo[0]}
+                        image={task.photo}
                         alt="Task Image"
                         sx={{
                           width: '100%',
@@ -239,7 +261,8 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
                       </Typography>
 
                       <Typography variant="caption">
-                        Deadline: {task.deadline}
+                        Deadline:
+                        {format(new Date(task.deadline), 'dd MMM yyyy')}
                       </Typography>
 
                       <Box sx={{ mt: 2, mb: 1 }}>
@@ -275,7 +298,24 @@ const TaskList = ({ refresh }: { refresh: boolean }) => {
                         size="small"
                         sx={{ mt: 1 }}
                       />
-
+                      {user.role === 'ADMIN' && (
+                        <Box
+                          sx={{
+                            mt: 2,
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => handleDelete(task.id)}
+                            disabled={loadingTaskId === task.id}
+                          >
+                            Delete
+                          </Button>
+                        </Box>
+                      )}
                       {task.submitted &&
                         !task.approved &&
                         !task.rejected &&

@@ -15,7 +15,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { FilterOption, Task } from './TaskList';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import { format } from 'date-fns';
 const UserList = ({
   filter,
   setFilter,
@@ -94,7 +94,7 @@ const UserList = ({
                   </Typography>
 
                   <Typography variant="caption">
-                    Deadline: {task.deadline}
+                    Deadline: {format(new Date(task.deadline), 'dd MMM yyyy')}
                   </Typography>
 
                   <Box sx={{ mt: 2, mb: 1 }}>

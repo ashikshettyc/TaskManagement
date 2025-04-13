@@ -55,8 +55,9 @@ const Page = () => {
           </Button>
         </Stack>
       </Stack>
-
-      <TaskList refresh={refresh} />
+      <Stack marginBottom={15}>
+        <TaskList refresh={refresh} />
+      </Stack>
 
       <Modal
         open={open}
